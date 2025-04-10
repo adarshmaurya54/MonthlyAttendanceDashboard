@@ -1,10 +1,30 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+// Import your components/pages
+import Layout from './components/Layout'
+import HomePage from './pages/HomePage'
+import StudentList from './pages/StudentList'
+import AttendanceForm from './pages/AttendanceForm'
+import AttendanceDashboard from './pages/AttendanceDashboard'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: 'students', element: <StudentList /> },
+      { path: 'mark-attendance', element: <AttendanceForm /> },
+      { path: 'attendance-dashboard/:enrollment', element: <AttendanceDashboard /> },
+    ],
+  },
+])
+
+ReactDOM.createRoot(document.getElementById('root')).render(<>
+  <RouterProvider router={router} />
+  <Toaster />
+</>
 )
