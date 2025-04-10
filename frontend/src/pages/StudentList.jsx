@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { API } from "../services/apiService";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const StudentList = () => {
   const [students, setStudents] = useState(null);
@@ -15,12 +16,15 @@ const StudentList = () => {
   const currentMonthName = monthNames[new Date().getMonth()];
 
   const getAllStudents = async () => {
+    const toastId = toast.loading("Please wait...")
     try {
       setLoading(true);
       const { data } = await API.get("/students/");
       setStudents(data.students);
+      toast.success("Data fetched !", {id: toastId})
     } catch (err) {
       console.error("Error fetching students:", err);
+      toast.error("Error!", {id: toastId})
       setError("Failed to load student data. Please try again.");
     } finally {
       setLoading(false);

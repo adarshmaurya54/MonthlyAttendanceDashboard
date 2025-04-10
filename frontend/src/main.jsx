@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <Layout />,
     children: [
-      { index: true, element: <HomePage /> },
+      { path: '', element: <HomePage /> },
       { path: 'students', element: <StudentList /> },
       { path: 'mark-attendance', element: <AttendanceForm /> },
       { path: 'attendance-dashboard/:enrollment', element: <AttendanceDashboard /> },
