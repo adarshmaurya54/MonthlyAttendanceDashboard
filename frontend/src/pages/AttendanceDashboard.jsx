@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 function AttendanceDashboard() {
   const { enrollment } = useParams();
   const [attendanceMap, setAttendanceMap] = useState(new Map());
+  const [studentName, setStudentName] = useState('')
+  const [studentEnrollment, setStudentEnrollment] = useState('')
 
   const today = new Date();
   const year = today.getFullYear();
@@ -25,7 +27,8 @@ function AttendanceDashboard() {
         const date = new Date(record.date).getDate(); // extract day only
         statusMap.set(date, record.status); // status: "Present" or "Absent"
       });
-
+      setStudentName(data.name)
+      setStudentEnrollment(data.enrollment)
       setAttendanceMap(statusMap);
     } catch (error) {
       console.error("Error fetching attendance", error);
@@ -54,20 +57,21 @@ function AttendanceDashboard() {
     calendarCells.push(
       <div
         key={day}
-        className={`border rounded-lg flex flex-col items-center justify-center h-24 shadow-sm p-2 ${
-          isToday ? "bg-indigo-600 text-white font-bold" : "bg-white"
-        }`}
+        className={`md:border rounded-2xl flex flex-col items-center justify-center h-20 md:h-24 md:shadow-sm p-1 md:p-2 ${isToday ? "bg-sky-600 text-white font-bold" : "bg-white"
+          }`}
       >
         <div className="text-lg">{day}</div>
         {status && (
           <span
-            className={`text-xs mt-1 font-semibold rounded-full px-2 py-0.5 ${
-              status === "Present"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
+            className={`text-xs mt-1 font-semibold rounded-full px-2 py-0.5 
+      ${status === "Present" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} 
+      md:text-sm md:px-3 md:py-1 md:rounded-lg`}
           >
-            {status}
+            {/* Display full status for devices larger than md, and abbreviated for smaller devices */}
+            <span className="hidden md:inline">{status}</span>
+            <span className="inline md:hidden">
+              {status === "Present" ? "P" : "A"}
+            </span>
           </span>
         )}
       </div>
@@ -75,20 +79,27 @@ function AttendanceDashboard() {
   }
 
   return (
-    <div className="min-h-screen p-6 bg-white pt-20">
-      <h2 className="text-2xl font-bold mb-4">
-        Attendance Calendar –{" "}
-        {today.toLocaleString("default", { month: "long" })} {year}
+    <div className="min-h-screen md:px-6 bg-white pt-20">
+      <h2 className="p-4 md:p-0 text-xl md:text-2xl mb-6 md:mb-10">
+        Attendance Calendar -{" "}
+        {today.toLocaleString("default", { month: "long" })} {year}{" "}
+        (for <span className="font-semibold">{studentName}</span>)
       </h2>
 
-      <div className="px-10">
-        <div className="grid grid-cols-7 gap-2 mb-2 text-center text-sm font-semibold text-gray-700">
+      <div className="md:border my-5 rounded-3xl md:p-10">
+        {/* Days of Week */}
+        <div className="grid grid-cols-7 gap-2 mb-2 text-center text-xs md:text-sm font-semibold text-gray-700">
           {daysOfWeek.map((day) => (
-            <div key={day}>{day}</div>
+            <div key={day} className="min-w-0 truncate">
+              {day}
+            </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-2">{calendarCells}</div>
+        {/* Calendar Cells */}
+        <div className="grid grid-cols-7 gap-2">
+          {calendarCells}
+        </div>
       </div>
     </div>
   );

@@ -72,29 +72,30 @@ exports.getTodayAttendance = async (req, res) => {
 
 exports.getMonthlyAttendanceStats = async (req, res) => {
   try {
-    const { month } = req.query; // example: "2025-04"
+    const today = new Date(); // e.g. 2025-04-12
+    const year = today.getFullYear();
+    const month = today.getMonth(); // April = 3 (0-indexed)
+    const startOfMonth = new Date(year, month, 1);
 
-    if (!month || !/^\d{4}-\d{2}$/.test(month)) {
-      return res
-        .status(400)
-        .json({ error: "Invalid or missing month format (YYYY-MM)" });
+    // Step 1: Generate all working days from 1st to today (excluding Sundays)
+    const workingDates = [];
+    for (
+      let d = new Date(startOfMonth);
+      d <= today;
+      d.setDate(d.getDate() + 1)
+    ) {
+      if (d.getDay() !== 0) {
+        // 0 = Sunday
+        workingDates.push(new Date(d));
+      }
     }
-
-    const [year, monthNum] = month.split("-").map(Number);
-    const startOfMonth = new Date(year, monthNum - 1, 1);
-    const endOfMonth = new Date(year, monthNum, 0, 23, 59, 59);
-
-    // 1. Get all working days (distinct attendance dates in the month)
-    const workingDates = await Attendance.distinct("date", {
-      date: { $gte: startOfMonth, $lte: endOfMonth },
-    });
     const totalWorkingDays = workingDates.length;
 
-    // 2. Aggregate total present count per student
+    // Step 2: Get all "Present" records from Attendance in the range
     const presentData = await Attendance.aggregate([
       {
         $match: {
-          date: { $gte: startOfMonth, $lte: endOfMonth },
+          date: { $gte: startOfMonth, $lte: today },
           status: "Present",
         },
       },
@@ -106,16 +107,17 @@ exports.getMonthlyAttendanceStats = async (req, res) => {
       },
     ]);
 
-    // 3. Get all students
-    const allStudents = await Student.find({}, { name: 1, enrollment: 1 });
+    // Step 3: Get all students
+    const allStudents = await Student.find({}, { name: 1, enrollment: 1 }).sort(
+      { enrollment: 1 }
+    );
 
-    // 4. Merge data
+    // Step 4: Merge data
     const summary = allStudents.map((student) => {
-      const found = presentData.find(
-        (entry) => entry._id.toString() === student._id.toString()
+      const record = presentData.find(
+        (r) => r._id.toString() === student._id.toString()
       );
-
-      const totalPresent = found ? found.totalPresent : 0;
+      const totalPresent = record ? record.totalPresent : 0;
       const totalAbsent = totalWorkingDays - totalPresent;
 
       return {
@@ -133,6 +135,7 @@ exports.getMonthlyAttendanceStats = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 exports.getAttendenceOfTheStudent = async (req, res) => {
   try {
     const { enrollment } = req.params;
@@ -169,9 +172,21 @@ exports.getAttendenceOfTheStudent = async (req, res) => {
     const records = [];
     for (let day = 1; day <= today; day++) {
       const dateObj = new Date(year, month, day);
+      const dayOfWeek = dateObj.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+      // Determine the status
+      let status = "";
+      if (dayOfWeek === 0) {
+        status = ""; // For Sundays
+      } else if (presentMap.has(day)) {
+        status = "Present";
+      } else {
+        status = "Absent";
+      }
+
       records.push({
         date: dateObj,
-        status: presentMap.has(day) ? "Present" : "Absent",
+        status: status,
       });
     }
 
@@ -186,4 +201,3 @@ exports.getAttendenceOfTheStudent = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-

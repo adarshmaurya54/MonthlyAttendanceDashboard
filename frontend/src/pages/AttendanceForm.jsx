@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import {ToastIcon, toast} from "react-hot-toast";
 import { API } from "../services/apiService";
 
 const AttendanceForm = () => {
@@ -60,17 +60,18 @@ const AttendanceForm = () => {
       enrollment,
       present,
     }));
+    const toastId = toast.loading("Submitting attendance...")
 
     try {
       await API.post("/attendance/mark", {
         date: today,
         records: dataToSubmit,
       });
-      alert("Attendance marked successfully!");
+      toast.success("Attendance marked successfully!", {id: toastId});
       setMarked(true);
     } catch (err) {
       console.error(err);
-      alert("Error marking attendance.");
+      toast.error("Error marking attendance.", {id: toastId});
     }
   };
 
@@ -87,7 +88,7 @@ const AttendanceForm = () => {
 
   return (
     <div className="min-h-screen bg-white p-6 pt-20">
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-2xl mb-6">
         {marked ? "Today's Attendance (Already Marked)" : "Mark Attendance for Today"}
       </h1>
       <div className="relative h-[370px] border overflow-x-auto shadow-md sm:rounded-2xl p-2">
@@ -127,6 +128,13 @@ const AttendanceForm = () => {
         >
           Submit Attendance
         </button>
+      )}
+      {marked && (
+        <div className="my-5 flex flex-col items-start">
+          <p className="inline-block">Total No. of present : {Object.keys(attendance)?.length}</p>
+          <p className="inline-block">Total No. of absent : {62 - Object.keys(attendance)?.length}</p>
+          <p className="border-t-2 border-black">Total No. of students : 62</p>
+        </div>
       )}
     </div>
   );
