@@ -1,11 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import attendance from "../assets/attendance.png"
 
 const Header = () => {
   return (
     <div className="flex items-center justify-between px-4 py-3 shadow-md dark:bg-gray-800">
-      <h1 className="md:text-3xl font-bold text-gray-800 dark:text-white">
-        Monthly Attendance Dashboard
+      <h1 className="md:text-3xl flex items-center font-bold text-gray-800 dark:text-white">
+        <img src={attendance} className="w-20 h-20" alt="" />
+        DailyMark
       </h1>
       <div className="hidden md:flex items-center space-x-4">
         {/* Navigation buttons */}
@@ -13,10 +15,9 @@ const Header = () => {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              `px-4 py-2 rounded-lg font-medium ${
-                isActive
-                  ? "bg-sky-400 text-white"
-                  : "hover:bg-sky-100  text-black dark:text-blue-300"
+              `px-4 py-2 rounded-lg font-medium ${isActive
+                ? "bg-sky-400 text-white"
+                : "hover:bg-sky-100  text-black dark:text-blue-300"
               }`
             }
           >
@@ -25,10 +26,9 @@ const Header = () => {
           <NavLink
             to="/students"
             className={({ isActive }) =>
-              `px-4 py-2 rounded-lg font-medium ${
-                isActive
-                  ? "bg-sky-400 text-white"
-                  : "hover:bg-sky-100  text-black dark:text-blue-300"
+              `px-4 py-2 rounded-lg font-medium ${isActive
+                ? "bg-sky-400 text-white"
+                : "hover:bg-sky-100  text-black dark:text-blue-300"
               }`
             }
           >
@@ -37,10 +37,9 @@ const Header = () => {
           <NavLink
             to="/mark-attendance"
             className={({ isActive }) =>
-              `px-4 py-2 rounded-lg font-medium ${
-                isActive
-                  ? "bg-sky-400 text-white"
-                  : "hover:bg-sky-100  text-black dark:text-blue-300"
+              `px-4 py-2 rounded-lg font-medium ${isActive
+                ? "bg-sky-400 text-white"
+                : "hover:bg-sky-100  text-black dark:text-blue-300"
               }`
             }
           >

@@ -5,15 +5,15 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center justify-center bg-white min-h-screen px-4 md:px-6 py-20">
+    <div className="flex items-center justify-center bg-white py-10 px-4 md:px-6">
       <div className="flex flex-col md:flex-row w-full max-w-6xl ">
         
         {/* Left Side - Image */}
-        <div className="md:w-1/2 w-full h-64 md:h-auto">
+        <div className="md:w-1/2 w-full md:h-auto">
           <img
             src={student}
             alt="Attendance"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         </div>
 

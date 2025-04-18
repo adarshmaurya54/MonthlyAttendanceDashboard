@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {ToastIcon, toast} from "react-hot-toast";
+import { ToastIcon, toast } from "react-hot-toast";
 import { API } from "../services/apiService";
 
 const AttendanceForm = () => {
@@ -29,7 +29,7 @@ const AttendanceForm = () => {
         const mapped = {};
 
         data.records.forEach((record, i) => {
-          mapped[record.student.enrollment] = record.status;
+          mapped[record.enrollment] = record.status;
         });
         setAttendance(mapped);
         setMarked(true);
@@ -48,18 +48,38 @@ const AttendanceForm = () => {
     fetchData();
   }, []);
 
-  const handleCheckboxChange = (enrollment) => {
-    setAttendance((prev) => ({
-      ...prev,
-      [enrollment]: !prev[enrollment],
-    }));
+  const handleCheckboxChange = (enrollment, name) => {
+    setAttendance((prev) => {
+      // If already present, remove it (uncheck)
+      if (prev[enrollment]) {
+        const updated = { ...prev };
+        delete updated[enrollment];
+        return updated;
+      }
+      // If not present, add it (check)
+      return {
+        ...prev,
+        [enrollment]: {
+          name: name,
+          present: true,
+        },
+      };
+    });
   };
+  
+
+
+  useEffect(() => {
+    console.log(attendance)
+  }, [attendance])
 
   const handleSubmit = async () => {
-    const dataToSubmit = Object.entries(attendance).map(([enrollment, present]) => ({
+    const dataToSubmit = Object.entries(attendance).map(([enrollment, info]) => ({
       enrollment,
-      present,
+      name: info.name,
+      present: info.present,
     }));
+
     const toastId = toast.loading("Submitting attendance...")
 
     try {
@@ -67,11 +87,11 @@ const AttendanceForm = () => {
         date: today,
         records: dataToSubmit,
       });
-      toast.success("Attendance marked successfully!", {id: toastId});
+      toast.success("Attendance marked successfully!", { id: toastId });
       setMarked(true);
     } catch (err) {
       console.error(err);
-      toast.error("Error marking attendance.", {id: toastId});
+      toast.error("Error marking attendance.", { id: toastId });
     }
   };
 
@@ -87,7 +107,7 @@ const AttendanceForm = () => {
 
 
   return (
-    <div className="min-h-screen bg-white p-6 pt-20">
+    <div className="min-h-screen bg-white p-6">
       <h1 className="text-2xl mb-6">
         {marked ? "Today's Attendance (Already Marked)" : "Mark Attendance for Today"}
       </h1>
@@ -111,8 +131,8 @@ const AttendanceForm = () => {
                   <input
                     type="checkbox"
                     disabled={marked}
-                    checked={attendance[student.enrollment] || false}
-                    onChange={() => handleCheckboxChange(student.enrollment)}
+                    checked={!!attendance[student.enrollment]} // convert undefined to false
+                    onChange={() => handleCheckboxChange(student.enrollment, student.name)}
                   />
                 </td>
               </tr>

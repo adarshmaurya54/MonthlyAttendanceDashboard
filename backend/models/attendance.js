@@ -3,9 +3,12 @@
 const mongoose = require("mongoose");
 
 const attendanceSchema = new mongoose.Schema({
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "student",
+  enrollment: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
     required: true,
   },
   date: {
@@ -19,6 +22,6 @@ const attendanceSchema = new mongoose.Schema({
   }
 });
 
-attendanceSchema.index({ student: 1, date: 1 }, { unique: true }); // prevent duplicate entries
+attendanceSchema.index({ enrollment: 1, date: 1 }, { unique: true }); // prevent duplicate entries
 
 module.exports = mongoose.model("Attendance", attendanceSchema);

@@ -16,9 +16,9 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen dark:bg-gray-900">
       {/* Fixed Header */}
-      <header className={`transition-all duration-300 fixed top-0 left-0 right-0 z-10 ${scrolled && "p-3"}`}>
+      <header className={`transition-all duration-300 sticky top-0 z-10 ${scrolled && "p-3"}`}>
         <div
           className={`duration-300 overflow-hidden ${
             scrolled ?
@@ -30,7 +30,7 @@ const Layout = () => {
       </header>
             
       {/* Main Content */}
-      <main className="">
+      <main className="bg-white">
         <Outlet />
       </main>
     </div>

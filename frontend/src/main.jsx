@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       { path: '', element: <HomePage /> },
       { path: 'students', element: <StudentList /> },
       { path: 'mark-attendance', element: <AttendanceForm /> },
-      { path: 'attendance-dashboard/:enrollment', element: <AttendanceDashboard /> },
+      { path: 'attendance-dashboard/:enrollment/:monthParam', element: <AttendanceDashboard /> },
     ],
   },
 ])
