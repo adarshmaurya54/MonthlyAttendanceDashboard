@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true })); // for froms
 //routes
 app.use("/students", require('./routes/studentsRoutes'))
 app.use("/attendance", require('./routes/attendanceRoutes'))
+app.use("/auth", require('./routes/authRoutes'))
 
 // Error Handler Middleware
 app.use((err, req, res, next) => {

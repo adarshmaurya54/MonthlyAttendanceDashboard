@@ -9,6 +9,9 @@ import HomePage from './pages/HomePage'
 import StudentList from './pages/StudentList'
 import AttendanceForm from './pages/AttendanceForm'
 import AttendanceDashboard from './pages/AttendanceDashboard'
+import Login from './pages/Login'
+import { Provider } from 'react-redux'
+import store from './redux/store'
 
 const router = createBrowserRouter([
   {
@@ -21,10 +24,11 @@ const router = createBrowserRouter([
       { path: 'attendance-dashboard/:enrollment/:monthParam', element: <AttendanceDashboard /> },
     ],
   },
+  { path: 'login', element: <Login /> },
 ])
 
-ReactDOM.createRoot(document.getElementById('root')).render(<>
+ReactDOM.createRoot(document.getElementById('root')).render(<Provider store={store}>
   <RouterProvider router={router} />
   <Toaster />
-</>
+</Provider>
 )
