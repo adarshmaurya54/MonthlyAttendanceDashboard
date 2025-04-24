@@ -22,7 +22,7 @@ const Layout = () => {
         <div
           className={`duration-300 overflow-hidden ${
             scrolled ?
-            " border-gray-400/20 dark:border-gray-500 rounded-3xl bg-dark/70 border-2 backdrop-blur-md" : "bg-white "
+            " border-gray-400/20 dark:border-gray-500 rounded-3xl bg-white/60 border r-2 backdrop-blur-md" : "bg-white "
           }`}
         >
           <Header />

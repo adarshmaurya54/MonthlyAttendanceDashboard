@@ -27,7 +27,8 @@ const router = createBrowserRouter([
   { path: 'login', element: <Login /> },
 ])
 
-ReactDOM.createRoot(document.getElementById('root')).render(<Provider store={store}>
+ReactDOM.createRoot(document.getElementById('root')).render(
+<Provider store={store}>
   <RouterProvider router={router} />
   <Toaster />
 </Provider>

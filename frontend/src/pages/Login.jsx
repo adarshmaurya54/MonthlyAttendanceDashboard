@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoIosMail } from "react-icons/io";
 import { IoLockClosedOutline } from "react-icons/io5";
 
-
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -52,12 +51,9 @@ function Login() {
                     </div>
                     <div className="rounded-2xl p-3 bg-white mt-3">
                         <div className="relative select-none w-full flex items-center ">
-                            <div className={`absolute z-10 top-0 ${loginType === "student" ? "left-[50%]" : "left-[0%]"}  transition-all duration-500 bg-black rounded-xl h-full w-1/2`}></div>
-                            <div onClick={() => setLoginType("teacher")} className={`w-1/2 z-20 text-center cursor-pointer transition-colors duration-500 rounded-xl p-2 ${loginType !== "teacher" ? "text-black" : "text-white"}`}>
+                            <div className={`absolute z-10 top-0 ${loginType === "student" ? "left-[50%]" : "left-[0%]"}  transition-all duration-500 bg-black rounded-xl h-full w-full`}></div>
+                            <div onClick={() => setLoginType("teacher")} className={`w-full z-20 text-center cursor-pointer transition-colors duration-500 rounded-xl p-2 ${loginType !== "teacher" ? "text-black" : "text-white"}`}>
                                 Teacher
-                            </div>
-                            <div onClick={() => setLoginType("student")} className={`w-1/2 z-20 text-center cursor-pointer transition-colors duration-500 rounded-xl p-2 ${loginType !== "student" ? "text-black" : "text-white"}`}>
-                                Student
                             </div>
                         </div>
                     </div>

@@ -1,12 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import attendance from "../assets/attendance.png"
 import { getCurrentUser } from "../redux/features/auth/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/features/auth/authSlice";
 import toast from "react-hot-toast";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { LiaTimesSolid } from "react-icons/lia";
+
 
 const Header = () => {
+  const [hambOpen, setHambOpen] = useState(false)
   const { user } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -19,14 +23,20 @@ const Header = () => {
     toast.success("Logout successful");
   };
   return (
-    <div className="flex items-center justify-between px-4 shadow-md dark:bg-gray-800">
-      <h1 className="md:text-3xl flex items-center gap-3 font-bold text-gray-800 dark:text-white">
-        <img src={attendance} className="w-20 h-20 object-contain" alt="" />
-        DailyMark
-      </h1>
-      <div className="hidden md:flex items-center space-x-4">
+    <div className="flex md:flex-row  md:py-0 py-2 flex-col md:items-center justify-between px-4 dark:bg-gray-800">
+      <div className="flex items-center justify-between">
+        <h1 className="md:text-3xl flex items-center gap-3 font-bold text-gray-800 dark:text-white">
+          <img src={attendance} className="md:w-20 md:h-20 w-10 h-10 object-contain" alt="" />
+          DailyMark
+        </h1>
+        <span  onClick={() => setHambOpen(!hambOpen)}  className="md:hidden flex text-3xl cursor-pointer">
+          {!hambOpen && <RxHamburgerMenu/>}
+          {hambOpen && <LiaTimesSolid />}
+        </span>
+      </div>
+      <div className={`md:flex-row md:py-0 py-4 flex-col md:items-center gap-4 ${hambOpen ? 'flex' : 'md:flex hidden'}`}>
         {/* Navigation buttons */}
-        <div className="flex items-center space-x-2">
+        <div className="flex md:flex-row flex-col md:items-center gap-2">
           <NavLink
             to="/"
             className={({ isActive }) =>
@@ -63,7 +73,7 @@ const Header = () => {
         </div>
 
         {/* Separator */}
-        <div className="h-6 w-px bg-gray-400 dark:bg-gray-600 mx-2"></div>
+        <div className="md:h-6 h-px md:w-px bg-gray-400 dark:bg-gray-600 mx-2"></div>
 
         {/* Login Button */}
         {!user && <Link to="/login" className="px-4 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-medium">

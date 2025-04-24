@@ -1,12 +1,27 @@
 import { useEffect, useState } from "react";
 import { ToastIcon, toast } from "react-hot-toast";
 import { API } from "../services/apiService";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser } from "../redux/features/auth/authAction";
+import { useNavigate } from "react-router-dom";
 
 const AttendanceForm = () => {
   const [attendance, setAttendance] = useState({});
   const [students, setStudents] = useState(null);
   const [loading, setLoading] = useState(true);
   const [marked, setMarked] = useState(false);
+  const { user, token } = useSelector((state) => state.auth)
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  useEffect(() => {
+    dispatch(getCurrentUser()); 
+  }, [dispatch, token]);
+  useEffect(() => {
+    if (!user) {
+      setIsLoggedIn(false)
+    }
+  }, [token, user, navigate]);
 
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
   const isSunday = new Date().getDay() === 0;
@@ -66,7 +81,7 @@ const AttendanceForm = () => {
       };
     });
   };
-  
+
 
 
   useEffect(() => {
@@ -99,8 +114,15 @@ const AttendanceForm = () => {
 
   if (isSunday) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white text-3xl font-semibold text-gray-700">
+      <div className="py-20 flex items-center justify-center bg-white text-3xl font-semibold text-gray-700">
         Today is Sunday. No attendance is required.
+      </div>
+    );
+  }
+  if (!isLoggedIn) {
+    return (
+      <div className="py-20 flex items-center justify-center bg-white text-3xl font-semibold text-gray-700">
+        Login require !!
       </div>
     );
   }
