@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import Header from "./Header"; // Assuming you have a Header component
+import Footer from "./Footer";
 
 const Layout = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -33,6 +34,8 @@ const Layout = () => {
       <main className="bg-white">
         <Outlet />
       </main>
+
+      <Footer/>
     </div>
   );
 };
