@@ -17,7 +17,7 @@ const Layout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen dark:bg-gray-900">
+    <div className="min-h-screen font-poppins dark:bg-gray-900">
       {/* Fixed Header */}
       <header className={`transition-all duration-300 sticky top-0 z-10 ${scrolled && "p-3"}`}>
         <div
