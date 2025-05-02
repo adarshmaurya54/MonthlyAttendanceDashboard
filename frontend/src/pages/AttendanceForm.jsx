@@ -4,6 +4,7 @@ import { API } from "../services/apiService";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser } from "../redux/features/auth/authAction";
 import { useNavigate } from "react-router-dom";
+import { FaSpinner, FaCalendarTimes, FaLock } from 'react-icons/fa';
 
 const AttendanceForm = () => {
   const [attendance, setAttendance] = useState({});
@@ -15,7 +16,7 @@ const AttendanceForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   useEffect(() => {
-    dispatch(getCurrentUser()); 
+    dispatch(getCurrentUser());
   }, [dispatch, token]);
   useEffect(() => {
     if (!user) {
@@ -110,19 +111,39 @@ const AttendanceForm = () => {
     }
   };
 
-  if (loading) return <div className="text-center p-4">Loading...</div>;
-
-  if (isSunday) {
+  if (loading) {
     return (
-      <div className="py-20 flex items-center justify-center bg-white text-3xl font-semibold text-gray-700">
-        Today is Sunday. No attendance is required.
+      <div className="flex flex-col items-center justify-center text-gray-600">
+        <FaSpinner className="animate-spin text-5xl mb-4 text-blue-500" />
+        <p className="text-xl font-medium">Loading, please wait...</p>
       </div>
     );
   }
+
+  if (isSunday) {
+    return (
+      <div className="flex flex-col items-center justify-center bg-blue-50 text-gray-700">
+        <FaCalendarTimes className="text-6xl text-blue-400 mb-4" />
+        <p className="text-2xl font-semibold">Relax! Today is Sunday.</p>
+        <p className="text-lg mt-2 text-gray-500">No attendance is required today.</p>
+      </div>
+    );
+  }
+
   if (!isLoggedIn) {
     return (
-      <div className="py-20 flex items-center justify-center bg-white text-3xl font-semibold text-gray-700">
-        Login require !!
+      <div className="p-5">
+      <div className="flex rounded-3xl flex-col p-5 items-center justify-center bg-red-50 text-gray-700">
+        <FaLock className="text-6xl text-red-400 mb-4" />
+        <p className="text-2xl font-semibold">Access Denied</p>
+        <p className="text-lg mt-2 text-gray-500">Please login to continue.</p>
+        <a
+          href="/login"
+          className="mt-4 px-5 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+        >
+          Go to Login
+        </a>
+      </div>
       </div>
     );
   }

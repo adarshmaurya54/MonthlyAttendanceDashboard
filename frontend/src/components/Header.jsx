@@ -23,10 +23,10 @@ const Header = () => {
     toast.success("Logout successful");
   };
   return (
-    <div className="flex md:flex-row  md:py-0 py-2 flex-col md:items-center justify-between px-4 dark:bg-gray-800">
+    <div className="flex md:flex-row  py-3 flex-col md:items-center justify-between px-4 dark:bg-gray-800">
       <div className="flex items-center justify-between">
         <h1 className="md:text-3xl flex items-center gap-3 font-bold text-gray-800 dark:text-white">
-          <img src={attendance} className="md:w-20 md:h-20 w-10 h-10 object-contain" alt="" />
+          <img src={attendance} className="md:w-14 md:h-14 w-10 h-10 object-contain" alt="" />
           DailyMark
         </h1>
         <span  onClick={() => setHambOpen(!hambOpen)}  className="md:hidden flex text-3xl cursor-pointer">
@@ -69,6 +69,17 @@ const Header = () => {
             }
           >
             Mark Attendance
+          </NavLink>
+          <NavLink
+            to="/attendance-analytics"
+            className={({ isActive }) =>
+              `px-4 py-2 rounded-lg font-medium ${isActive
+                ? "bg-sky-400 text-white"
+                : "hover:bg-sky-100  text-black dark:text-blue-300"
+              }`
+            }
+          >
+            Attendance Analytics
           </NavLink>
         </div>
 

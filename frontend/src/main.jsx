@@ -12,6 +12,7 @@ import AttendanceDashboard from './pages/AttendanceDashboard'
 import Login from './pages/Login'
 import { Provider } from 'react-redux'
 import store from './redux/store'
+import AttendanceAnalytics from './pages/AttendanceAnalytics'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       { path: 'students', element: <StudentList /> },
       { path: 'mark-attendance', element: <AttendanceForm /> },
       { path: 'attendance-dashboard/:enrollment/:monthParam', element: <AttendanceDashboard /> },
+      { path: 'attendance-analytics', element: <AttendanceAnalytics /> },
     ],
   },
   { path: 'login', element: <Login /> },

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { FaAngleDown } from "react-icons/fa6";
 import { TbFileExport } from "react-icons/tb";
 import FileDownload from "js-file-download";
+import { FaSpinner } from "react-icons/fa";
 
 
 const StudentList = () => {
@@ -168,8 +169,9 @@ const StudentList = () => {
 
       {/* Loading */}
       {loading && (
-        <div className="text-center text-blue-600 font-medium">
-          Loading students...
+        <div className="flex flex-col items-center justify-center text-gray-600">
+          <FaSpinner className="animate-spin text-5xl mb-4 text-blue-500" />
+          <p className="text-xl font-medium">Loading, please wait...</p>
         </div>
       )}
 
