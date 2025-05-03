@@ -6,6 +6,7 @@ import { FaAngleDown } from "react-icons/fa6";
 import { TbFileExport } from "react-icons/tb";
 import FileDownload from "js-file-download";
 import { FaSpinner } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 
 const StudentList = () => {
@@ -19,6 +20,7 @@ const StudentList = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
   const [formattedMonth, setFormattedMonth] = useState("")
+  const {user} = useSelector(state => state.auth)
   const navigate = useNavigate();
 
   const monthNames = {
@@ -141,7 +143,7 @@ const StudentList = () => {
               Export As
               <TbFileExport />
             </button>
-            {exportOpen && (
+            {exportOpen && user && (
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow z-10">
                 <div className="p-1">
                   <div

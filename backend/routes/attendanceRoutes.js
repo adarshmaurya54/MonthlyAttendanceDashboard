@@ -3,7 +3,7 @@ const attendanceController = require("../controllers/attendanceController");
 const verifyToken = require("../middlewares/verifyToken");
 const router = express.Router();
 
-router.get("/export-attendance", attendanceController.exportAttendance);
+router.get("/export-attendance",verifyToken, attendanceController.exportAttendance);
 
 router.post("/mark",verifyToken, attendanceController.markAttendance)
 router.get("/today",verifyToken, attendanceController.getTodayAttendance)
