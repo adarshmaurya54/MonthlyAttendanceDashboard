@@ -17,7 +17,6 @@ function Login() {
 
     const navigate = useNavigate(); // To navigate to another page on success
     const { user, token } = useSelector((state) => state.auth)
-    console.log(user,token)
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getCurrentUser()); // Dispatch action directly
@@ -28,7 +27,7 @@ function Login() {
         try {
             store.dispatch(userLogin({ email, password, loginType }))
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 

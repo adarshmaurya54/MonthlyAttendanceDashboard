@@ -18,7 +18,7 @@ const Footer = () => {
         <div>
           <h2 className="text-lg font-semibold mb-2">Contact</h2>
           <p className="text-sm">Adarsh Maurya</p>
-          <p className="text-sm">Email: <a href="mailto:adarshmaurya0022@example.com" className="text-blue-500 hover:underline">adarshmaurya0022@example.com</a></p>
+          <p className="text-sm">Email: <a href="mailto:adarshmaurya0022@gmail.com" className="text-blue-500 hover:underline">adarshmaurya0022@gmail.com</a></p>
         </div>
 
         {/* Social Media Section */}
@@ -27,7 +27,7 @@ const Footer = () => {
           <div className="flex justify-center md:justify-start gap-4 text-xl mt-2">
             <a href="https://github.com/adarshmaurya54" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500"><FaGithub /></a>
             <a href="https://linkedin.com/in/adarshmaurya54" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500"><FaLinkedin /></a>
-            <a href="mailto:adarsh@example.com" className="hover:text-blue-500"><FaEnvelope /></a>
+            <a href="mailto:adarshmaurya0022@gmail.com" className="hover:text-blue-500"><FaEnvelope /></a>
           </div>
         </div>
       </div>

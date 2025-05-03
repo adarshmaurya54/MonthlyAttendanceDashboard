@@ -593,8 +593,7 @@ exports.markAttendance = async (req, res) => {
 };
 
 exports.getTodayAttendance = async (req, res) => {
-  const { date } = req.query; // YYYY-MM-DD
-  console.log(req.query);
+  const { date } = req.query; 
 
   if (!date) {
     return res.status(400).json({ error: "Date is required" });
@@ -690,7 +689,6 @@ exports.getMonthlyAttendanceStats = async (req, res) => {
 };
 
 exports.getAttendenceOfTheStudent = async (req, res) => {
-  console.log("hii-1");
   try {
     const { enrollment, monthParam } = req.params;
 

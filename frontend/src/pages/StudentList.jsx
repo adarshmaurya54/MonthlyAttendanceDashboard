@@ -84,9 +84,6 @@ const StudentList = () => {
   useEffect(() => {
     getAllStudents();
   }, []);
-
-  console.log(formattedMonth)
-
   const downloadAttendance = async (monthParam, format) => {
     const toastId = toast.loading("Exporting attendance...");
     try {
@@ -129,16 +126,16 @@ const StudentList = () => {
 
 
   return (
-    <div className="bg-white px-6">
+    <div className="bg-white md:px-6 px-3">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Student List</h1>
+        <h1 className="md:text-2xl font-bold">Student List</h1>
 
         <div className="flex items-center gap-3">
 
           <div className="relative">
             <button
               onClick={() => { setExportOpen(!exportOpen); setDropdownOpen(false) }}
-              className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-lg border text-sm font-semibold text-gray-900"
+              className="inline-flex items-center text-nowrap gap-2 bg-white px-4 py-2 rounded-lg border text-sm font-semibold text-gray-900"
             >
               Export As
               <TbFileExport />
@@ -222,17 +219,17 @@ const StudentList = () => {
 
       {/* Table */}
       {!loading && !error && (
-        <div className="relative h-full border overflow-x-auto shadow-md sm:rounded-2xl p-2">
+        <div className="relative h-full border overflow-x-auto shadow-md rounded-2xl p-2">
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-100">
               <tr>
                 <th className="px-6 py-3 rounded-s-lg">#</th>
-                <th className="px-6 py-3">Enrollment No</th>
+                <th className="px-6 py-3 text-nowrap">Enrollment No</th>
                 <th className="px-6 py-3">Name</th>
                 <th className="px-6 py-3">Month</th>
-                <th className="px-6 py-3">Present Days</th>
-                <th className="px-6 py-3">Absent Days</th>
-                <th className="px-6 py-3 rounded-e-lg">View Details</th>
+                <th className="px-6 py-3 text-nowrap">Present Days</th>
+                <th className="px-6 py-3 text-nowrap">Absent Days</th>
+                <th className="px-6 py-3 rounded-e-lg text-nowrap">View Details</th>
               </tr>
             </thead>
             <tbody>

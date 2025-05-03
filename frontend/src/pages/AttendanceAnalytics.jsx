@@ -26,6 +26,7 @@ const getMonthOptions = () => {
 
 const AttendanceAnalytics = () => {
   const [enrollment, setEnrollment] = useState('');
+  const [stdName, setStdName] = useState('');
   const [month, setMonth] = useState('');
   const [chartData, setChartData] = useState(null);
   const [error, setError] = useState('');
@@ -35,6 +36,7 @@ const AttendanceAnalytics = () => {
     try {
       const response = await API.get(`/attendance/${enrollment}/${month}`);
       const records = response.data.records || [];
+      setStdName(response.data.name)
 
       let present = 0;
       let absent = 0;
@@ -67,11 +69,10 @@ const AttendanceAnalytics = () => {
     } catch (err) {
       setChartData(null);
       setAvgAttendance(null);
-      setError('Failed to fetch attendance data.');
+      setError('Invalid Enrollment Number !!');
     }
   };
 
-  // Whenever the enrollment or month changes, fetch data again
   useEffect(() => {
     if (enrollment && month) {
       fetchData();
@@ -99,17 +100,18 @@ const AttendanceAnalytics = () => {
           required
         >
           <option value="">Select Month</option>
+          <option value="all">All</option>
           {getMonthOptions().map(m => (
             <option key={m} value={m}>{m}</option>
           ))}
         </select>
       </form>
 
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p className="text-red-500 text-center font-bold bg-red-50 py-5 px-5 md:px-0 md:w-[500px] rounded-3xl">{error}</p>}
 
       {chartData && (
-        <div className="bg-white border h-fit w-[500px] rounded-3xl p-6">
-          <h2 className="text-2xl font-semibold text-center mb-4">Attendance Distribution (Pie Chart)</h2>
+        <div className="bg-white border h-fit md:w-[500px] w-[350px] transition-all duration-500 rounded-3xl p-6">
+          <h2 className="text-2xl font-semibold text-center mb-4">Attendance Distribution of <spna className="block font-bold">{stdName}</spna></h2>
           <Pie data={chartData} />
           {avgAttendance !== null && (
             <p className="text-center mt-4 text-lg font-medium">

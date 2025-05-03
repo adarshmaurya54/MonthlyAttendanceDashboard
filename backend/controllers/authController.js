@@ -49,7 +49,6 @@ exports.signupForTeacher = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  console.log("email, password")
   try {
     const { email, password, loginType } = req.body;
     if (!email || !password) {

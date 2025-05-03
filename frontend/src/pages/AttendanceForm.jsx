@@ -140,7 +140,7 @@ const AttendanceForm = () => {
         <p className="text-lg mt-2 text-gray-500">Please login to continue.</p>
         <a
           href="/login"
-          className="mt-4 px-5 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
+          className="mt-4 px-5 py-2 bg-red-500 text-white rounded-xl duration-500 hover:bg-red-600 transition"
         >
           Go to Login
         </a>
@@ -151,11 +151,11 @@ const AttendanceForm = () => {
 
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white md:p-6 p-3">
       <h1 className="text-2xl mb-6">
         {marked ? "Today's Attendance (Already Marked)" : "Mark Attendance for Today"}
       </h1>
-      <div className="relative h-full border overflow-x-auto shadow-md sm:rounded-2xl p-2">
+      <div className="relative h-full border overflow-x-auto shadow-md rounded-2xl p-2">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
