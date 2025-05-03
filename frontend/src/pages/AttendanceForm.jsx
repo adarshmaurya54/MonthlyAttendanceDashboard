@@ -52,6 +52,7 @@ const AttendanceForm = () => {
       }
     } catch (error) {
       console.log("No attendance found for today (yet).");
+      console.error(error)
     }
   };
 
@@ -154,7 +155,7 @@ const AttendanceForm = () => {
       <h1 className="text-2xl mb-6">
         {marked ? "Today's Attendance (Already Marked)" : "Mark Attendance for Today"}
       </h1>
-      <div className="relative h-[370px] border overflow-x-auto shadow-md sm:rounded-2xl p-2">
+      <div className="relative h-full border overflow-x-auto shadow-md sm:rounded-2xl p-2">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -193,10 +194,10 @@ const AttendanceForm = () => {
         </button>
       )}
       {marked && (
-        <div className="my-5 flex flex-col items-start">
-          <p className="inline-block">Total No. of present : {Object.keys(attendance)?.length}</p>
-          <p className="inline-block">Total No. of absent : {62 - Object.keys(attendance)?.length}</p>
-          <p className="border-t-2 border-black">Total No. of students : 62</p>
+        <div className="my-5 flex flex-col justify-between items-start">
+          <p className="text-gray-400">Total No. of present : <span className="text-gray-900 font-bold">{Object.keys(attendance)?.length}</span></p>
+          <p className="text-gray-400">Total No. of absent : <span className="text-gray-900 font-bold">{62 - Object.keys(attendance)?.length}</span></p>
+          <p className="text-gray-400">Total No. of students : <span className="text-gray-900 font-bold">62</span></p>
         </div>
       )}
     </div>

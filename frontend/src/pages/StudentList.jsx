@@ -85,28 +85,46 @@ const StudentList = () => {
 
   console.log(formattedMonth)
 
-  const downloadExcel = async (monthParam) => {
+  const downloadAttendance = async (monthParam, format) => {
     const toastId = toast.loading("Exporting attendance...");
     try {
       const [year, month] = monthParam.split("-");
 
-      // Reverse lookup from number to name
       const monthName = Object.keys(monthNames).find(
         (name) => monthNames[name] === month
       );
 
-      const response = await API.get("/attendance/export-excel", {
-        params: { monthParam, format: 'pdf' },
+      const response = await API.get("/attendance/export-attendance", {
+        params: { monthParam, format },
         responseType: "blob",
       });
 
-      FileDownload(response.data, `${monthName}-Attendance.xlsx`);
+      // Determine file extension based on format
+      let fileExtension = "";
+      switch (format) {
+        case "excel":
+          fileExtension = "xlsx";
+          break;
+        case "pdf":
+          fileExtension = "pdf";
+          break;
+        case "csv":
+          fileExtension = "csv";
+          break;
+        case "json":
+          fileExtension = "json";
+          break;
+        default:
+          fileExtension = "txt"; 
+      }
+      FileDownload(response.data, `${monthName}-Attendance.${fileExtension}`);
       toast.success("Exported!", { id: toastId });
     } catch (err) {
       console.error("Download failed", err);
       toast.error("Oops!! Error while exporting!", { id: toastId });
     }
   };
+
 
   return (
     <div className="bg-white px-6">
@@ -127,10 +145,28 @@ const StudentList = () => {
               <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow z-10">
                 <div className="p-1">
                   <div
-                    onClick={() => downloadExcel(formattedMonth)}
+                    onClick={() => downloadAttendance(formattedMonth, 'excel')}
                     className="px-4 py-2 rounded-md text-sm hover:bg-gray-100 cursor-pointer"
                   >
                     Excel
+                  </div>
+                  <div
+                    onClick={() => downloadAttendance(formattedMonth, 'pdf')}
+                    className="px-4 py-2 rounded-md text-sm hover:bg-gray-100 cursor-pointer"
+                  >
+                    PDF
+                  </div>
+                  <div
+                    onClick={() => downloadAttendance(formattedMonth, 'csv')}
+                    className="px-4 py-2 rounded-md text-sm hover:bg-gray-100 cursor-pointer"
+                  >
+                    CSV
+                  </div>
+                  <div
+                    onClick={() => downloadAttendance(formattedMonth, 'json')}
+                    className="px-4 py-2 rounded-md text-sm hover:bg-gray-100 cursor-pointer"
+                  >
+                    JSON
                   </div>
                 </div>
               </div>
@@ -184,7 +220,7 @@ const StudentList = () => {
 
       {/* Table */}
       {!loading && !error && (
-        <div className="relative h-[400px] border overflow-x-auto shadow-md sm:rounded-2xl p-2">
+        <div className="relative h-full border overflow-x-auto shadow-md sm:rounded-2xl p-2">
           <table className="w-full text-sm text-left text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-100">
               <tr>

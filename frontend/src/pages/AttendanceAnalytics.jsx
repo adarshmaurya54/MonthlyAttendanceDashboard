@@ -7,6 +7,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { API } from '../services/apiService';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -32,7 +33,7 @@ const AttendanceAnalytics = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/attendance/${enrollment}/${month}`);
+      const response = await API.get(`/attendance/${enrollment}/${month}`);
       const records = response.data.records || [];
 
       let present = 0;
