@@ -50,7 +50,7 @@ const Header = () => {
   ];
 
   return (
-    <div className="flex md:flex-row py-3 flex-col md:items-center justify-between px-4 dark:bg-gray-800 relative z-10">
+    <div className="flex md:flex-row py-3 flex-col md:items-center justify-between px-4 dark:bg-gray-800 relative">
       <div className="flex items-center justify-between">
         <h1 className="md:text-3xl flex items-center gap-3 font-bold text-gray-800 dark:text-white">
           <img src={attendance} className="md:w-14 md:h-14 w-10 h-10 object-contain" alt="" />
@@ -65,7 +65,7 @@ const Header = () => {
       <div className={`md:flex-row md:py-0 py-4 flex-col md:items-center gap-4 ${hambOpen ? 'flex' : 'md:flex hidden'}`}>
         <div className="relative" ref={navContainerRef}>
           <div
-            className="absolute bg-gray-200 dark:bg-blue-900 rounded-lg z-0 transition-all duration-300"
+            className="absolute bg-black/10 dark:bg-blue-900 rounded-lg z-0 transition-all duration-300"
             style={{
               ...hoverStyle,
               position: 'absolute',

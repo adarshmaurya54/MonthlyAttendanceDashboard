@@ -387,11 +387,18 @@ const exportMonthlyAttendanceToCSV = async (res, monthParam) => {
   });
 
   // CSV headers
-  const headers = ["Enrollment", "Name", ...workingDates.map(d => {
-    const dd = String(d.getDate()).padStart(2, "0");
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    return `${dd}-${mm}`;
-  }), "P", "A", "%"];
+  const headers = [
+    "Enrollment",
+    "Name",
+    ...workingDates.map((d) => {
+      const dd = String(d.getDate()).padStart(2, "0");
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      return `${dd}-${mm}`;
+    }),
+    "P",
+    "A",
+    "%",
+  ];
 
   const csvRows = [headers.join(",")];
 
@@ -420,7 +427,8 @@ const exportMonthlyAttendanceToCSV = async (res, monthParam) => {
     }
 
     const totalA = totalDays - totalP;
-    const percentage = totalDays === 0 ? "0%" : ((totalP / totalDays) * 100).toFixed(1) + "%";
+    const percentage =
+      totalDays === 0 ? "0%" : ((totalP / totalDays) * 100).toFixed(1) + "%";
 
     row.push(totalP);
     row.push(totalA);
@@ -433,7 +441,10 @@ const exportMonthlyAttendanceToCSV = async (res, monthParam) => {
 
   // Set headers
   res.setHeader("Content-Type", "text/csv");
-  res.setHeader("Content-Disposition", `attachment; filename=Attendance-${monthParam}.csv`);
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=Attendance-${monthParam}.csv`
+  );
 
   res.send(csvContent);
 };
@@ -494,7 +505,8 @@ const exportMonthlyAttendanceToJSON = async (res, monthParam) => {
       const dateStr = date.toISOString().split("T")[0];
       const isPresent = presentMap[student.enrollment]?.has(dateStr);
 
-      if (date.getDay() !== 0) {  // Skip Sundays
+      if (date.getDay() !== 0) {
+        // Skip Sundays
         totalDays++;
         if (isPresent) {
           studentAttendance.attendance.push({ date: dateStr, status: "P" });
@@ -516,10 +528,12 @@ const exportMonthlyAttendanceToJSON = async (res, monthParam) => {
 
   // Send JSON response
   res.setHeader("Content-Type", "application/json");
-  res.setHeader("Content-Disposition", `attachment; filename=Attendance-${monthParam}.json`);
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=Attendance-${monthParam}.json`
+  );
   res.send(JSON.stringify(attendanceData, null, 2));
 };
-
 
 exports.exportAttendance = async (req, res) => {
   try {
@@ -593,7 +607,7 @@ exports.markAttendance = async (req, res) => {
 };
 
 exports.getTodayAttendance = async (req, res) => {
-  const { date } = req.query; 
+  const { date } = req.query;
 
   if (!date) {
     return res.status(400).json({ error: "Date is required" });
@@ -763,6 +777,124 @@ exports.getAttendenceOfTheStudent = async (req, res) => {
     });
   } catch (error) {
     console.error("Error fetching student attendance:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.getAllAttendanceSummaryOfStudent = async (req, res) => {
+  try {
+    const { enrollment } = req.params;
+
+    if (!enrollment) {
+      return res.status(400).json({ error: "Enrollment number is required" });
+    }
+
+    const student = await Student.findOne({ enrollment });
+    if (!student) return res.status(404).json({ error: "Student not found" });
+
+    // Fetch all attendance records for the student
+    const attendanceRecords = await Attendance.find({ enrollment })
+      .select("date status")
+      .sort({ date: 1 });
+
+    if (attendanceRecords.length === 0) {
+      return res.status(200).json({
+        enrollment: student.enrollment,
+        name: student.name,
+        totalPresent: 0,
+        totalAbsent: 0,
+        averageAttendance: "0%",
+        monthlySummary: [],
+      });
+    }
+
+    const summaryMap = new Map(); // key: YYYY-MM, value: { present, absent }
+
+    attendanceRecords.forEach((record) => {
+      const date = new Date(record.date);
+      const day = date.getDate();
+      const dayOfWeek = date.getDay();
+      const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+        2,
+        "0"
+      )}`;
+
+      if (!summaryMap.has(key)) {
+        summaryMap.set(key, { present: 0, absent: 0, totalDays: 0 });
+      }
+
+      if (dayOfWeek === 0) return; // skip Sundays
+
+      const monthData = summaryMap.get(key);
+      if (record.status === "Present") {
+        monthData.present++;
+      } else {
+        monthData.absent++;
+      }
+      summaryMap.set(key, monthData);
+    });
+
+    const today = new Date();
+
+    // Fill in possible absent days by calculating all working days
+    for (let [monthKey, data] of summaryMap.entries()) {
+      const [year, month] = monthKey.split("-").map(Number);
+
+      let workingDays = 0;
+      const isCurrentMonth =
+        today.getFullYear() === year && today.getMonth() + 1 === month;
+
+      const lastDay = isCurrentMonth
+        ? today.getDate()
+        : new Date(year, month, 0).getDate();
+
+      for (let d = 1; d <= lastDay; d++) {
+        const dateObj = new Date(year, month - 1, d);
+        const dayOfWeek = dateObj.getDay();
+        if (dayOfWeek !== 0) workingDays++;
+      }
+
+      // Adjust absent count
+      data.absent = workingDays - data.present;
+      data.totalDays = workingDays;
+      summaryMap.set(monthKey, data);
+    }
+
+    let totalPresent = 0;
+    let totalAbsent = 0;
+    const monthlySummary = [];
+
+    for (let [month, data] of summaryMap.entries()) {
+      totalPresent += data.present;
+      totalAbsent += data.absent;
+
+      monthlySummary.push({
+        month,
+        present: data.present,
+        absent: data.absent,
+        totalDays: data.totalDays,
+        attendancePercent: `${((data.present / data.totalDays) * 100).toFixed(
+          2
+        )}%`,
+      });
+    }
+
+    const totalDays = totalPresent + totalAbsent;
+    const averageAttendance =
+      totalDays > 0
+        ? `${((totalPresent / totalDays) * 100).toFixed(2)}%`
+        : "0%";
+
+    res.status(200).json({
+      enrollment: student.enrollment,
+      name: student.name,
+      totalPresent,
+      totalAbsent,
+      averageAttendance,
+      monthlySummary,
+    });
+  } catch (error) {
+    console.error("Error fetching all attendance:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

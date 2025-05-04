@@ -6,6 +6,7 @@ const router = express.Router();
 router.get("/export-attendance",verifyToken, attendanceController.exportAttendance);
 
 router.post("/mark",verifyToken, attendanceController.markAttendance)
+router.get("/overall/:enrollment", attendanceController.getAllAttendanceSummaryOfStudent)
 router.get("/today",verifyToken, attendanceController.getTodayAttendance)
 router.get("/month-summary/:monthParam", attendanceController.getMonthlyAttendanceStats);
 router.get("/:enrollment/:monthParam", attendanceController.getAttendenceOfTheStudent);

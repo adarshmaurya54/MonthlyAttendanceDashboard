@@ -123,10 +123,12 @@ const AttendanceForm = () => {
 
   if (isSunday) {
     return (
-      <div className="flex flex-col items-center justify-center bg-blue-50 text-gray-700">
-        <FaCalendarTimes className="text-6xl text-blue-400 mb-4" />
-        <p className="text-2xl font-semibold">Relax! Today is Sunday.</p>
-        <p className="text-lg mt-2 text-gray-500">No attendance is required today.</p>
+      <div className="p-5">
+        <div className="flex rounded-3xl flex-col p-5 items-center justify-center bg-blue-50 text-gray-700">
+          <FaCalendarTimes className="text-6xl text-blue-400 mb-4" />
+          <p className="text-2xl font-semibold">Relax! Today is Sunday.</p>
+          <p className="text-lg mt-2 text-gray-500">No attendance is required today.</p>
+        </div>
       </div>
     );
   }
@@ -134,17 +136,17 @@ const AttendanceForm = () => {
   if (!isLoggedIn) {
     return (
       <div className="p-5">
-      <div className="flex rounded-3xl flex-col p-5 items-center justify-center bg-red-50 text-gray-700">
-        <FaLock className="text-6xl text-red-400 mb-4" />
-        <p className="text-2xl font-semibold">Access Denied</p>
-        <p className="text-lg mt-2 text-gray-500">Please login to continue.</p>
-        <a
-          href="/login"
-          className="mt-4 px-5 py-2 bg-red-500 text-white rounded-xl duration-500 hover:bg-red-600 transition"
-        >
-          Go to Login
-        </a>
-      </div>
+        <div className="flex rounded-3xl flex-col p-5 items-center justify-center bg-red-50 text-gray-700">
+          <FaLock className="text-6xl text-red-400 mb-4" />
+          <p className="text-2xl font-semibold">Access Denied</p>
+          <p className="text-lg mt-2 text-gray-500">Please login to continue.</p>
+          <a
+            href="/login"
+            className="mt-4 px-5 py-2 bg-red-500 text-white rounded-xl duration-500 hover:bg-red-600 transition"
+          >
+            Go to Login
+          </a>
+        </div>
       </div>
     );
   }

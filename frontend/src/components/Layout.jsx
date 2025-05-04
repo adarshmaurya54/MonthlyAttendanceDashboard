@@ -19,23 +19,24 @@ const Layout = () => {
   return (
     <div className="min-h-screen font-poppins dark:bg-gray-900">
       {/* Fixed Header */}
-      <header className={`transition-all duration-300 sticky top-0 z-10 ${scrolled && "p-3"}`}>
+      <header className={`transition-all duration-300 sticky top-0 z-50 ${scrolled && "p-3"}`}>
         <div
-          className={`duration-300 overflow-hidden ${
-            scrolled ?
-            " border-gray-400/20 dark:border-gray-500 rounded-3xl bg-white/60 border r-2 backdrop-blur-md" : "bg-white "
-          }`}
+          className={`duration-300 overflow-hidden ${scrolled
+              ? "rounded-3xl bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.15)] border border-white/20"
+              : "bg-white"
+            }`}
         >
           <Header />
         </div>
+
       </header>
-            
+
       {/* Main Content */}
       <main className="bg-white">
         <Outlet />
       </main>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 };

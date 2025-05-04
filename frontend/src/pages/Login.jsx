@@ -82,10 +82,10 @@ function Login() {
                         <InputType icon={<IoLockClosedOutline />} extraClass='mt-5' inputType="password" name="password"
                             placeholder="Password" value={password}
                             onChange={(e) => setPassword(e)} />
-                        <span className="block mt-3 mb-1 ml-3 text-xs text-gray-400">
+                        <span className="block pointer-events-none mt-3 mb-1 ml-3 text-xs text-gray-400">
                             <p>Don't have an account? <Link className="text-blue-500 hover:underline" to='/sign-up'>Sign Up</Link></p>
                         </span>
-                        <span className="block ml-3 text-xs text-gray-400">
+                        <span className="block pointer-events-none ml-3 text-xs text-gray-400">
                             <a href="#">Forgot Password ?</a>
                         </span>
                         <input

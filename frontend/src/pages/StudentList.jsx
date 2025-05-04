@@ -141,7 +141,7 @@ const StudentList = () => {
               <TbFileExport />
             </button>
             {exportOpen && user && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow z-10">
+              <div className="absolute shadow-[0_8px_30px_rgba(0,0,0,0.15)] right-0 mt-2 w-48 bg-white border rounded-lg z-10">
                 <div className="p-1">
                   <div
                     onClick={() => downloadAttendance(formattedMonth, 'excel')}
@@ -180,7 +180,7 @@ const StudentList = () => {
               <FaAngleDown />
             </button>
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow z-10">
+              <div className="absolute shadow-[0_8px_30px_rgba(0,0,0,0.15)] right-0 mt-2 w-48 bg-white border rounded-lg z-10">
                 <div className="p-1">
                   {availableMonths.map((month) => (
                     <div
