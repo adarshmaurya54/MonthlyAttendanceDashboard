@@ -219,12 +219,12 @@ const AttendanceAnalytics = () => {
         <div className="relative">
           <button
             onClick={() => { setDropdownOpen(!dropdownOpen); }}
-            className="inline-flex w-full capitalize h-full text-nowrap text-gray-500 items-center gap-2 bg-white px-4 py-2 rounded-xl border text-sm font-semibold"
+            className="inline-flex justify-between w-full capitalize h-full text-nowrap text-gray-500 items-center gap-2 bg-white px-4 py-2 rounded-xl border text-sm font-semibold"
           >
             {selectedMonth === '' ? 'Select Month' : selectedMonth}
             <FaAngleDown />
           </button>
-          {dropdownOpen && <div className="absolute shadow-[0_8px_30px_rgba(0,0,0,0.15)] right-0 mt-2 w-48 overflow-hidden bg-white border rounded-xl z-10">
+          {dropdownOpen && <div className="absolute shadow-[0_8px_30px_rgba(0,0,0,0.15)] right-0 mt-2 md:w-48 w-full overflow-hidden bg-white border rounded-xl z-10">
             <div className="p-1 h-[200px] overflow-auto flex flex-col gap-1">
               <div
                 onClick={() => {
