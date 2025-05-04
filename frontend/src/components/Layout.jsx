@@ -22,7 +22,7 @@ const Layout = () => {
       <header className={`transition-all duration-300 sticky top-0 z-50 ${scrolled && "p-3"}`}>
         <div
           className={`duration-300 overflow-hidden ${scrolled
-              ? "rounded-3xl bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.15)] border border-white/20"
+              ? "rounded-3xl bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
               : "bg-white"
             }`}
         >

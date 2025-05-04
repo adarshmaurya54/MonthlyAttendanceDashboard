@@ -11,6 +11,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { API } from '../services/apiService';
+import { FaAngleDown } from 'react-icons/fa';
 
 ChartJS.register(
   CategoryScale,
@@ -38,13 +39,33 @@ const getMonthOptions = () => {
 const AttendanceAnalytics = () => {
   const [enrollment, setEnrollment] = useState('');
   const [stdName, setStdName] = useState('');
-  const [month, setMonth] = useState('');
   const [barOptions, setBarOptions] = useState(null)
   const [monthlySummaryOverallAttendance, setMonthlySummaryOverallAttendance] = useState(null);
   const [chartData, setChartData] = useState(null);
   const [barChartData, setBarChartData] = useState(null);
   const [error, setError] = useState('');
+  const [month, setMonth] = useState('')
   const [avgAttendance, setAvgAttendance] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  const monthNames = {
+    January: '01',
+    February: '02',
+    March: '03',
+    April: '04',
+    May: '05',
+    June: '06',
+    July: '07',
+    August: '08',
+    September: '09',
+    October: '10',
+    November: '11',
+    December: '12'
+  };
+
+  const currentMonthIndex = new Date().getMonth();
+  const availableMonths = Object.keys(monthNames).slice(0, currentMonthIndex + 1);
 
   const fetchData = async () => {
     try {
@@ -173,40 +194,73 @@ const AttendanceAnalytics = () => {
   };
 
   useEffect(() => {
-    if (enrollment && month && month !== 'all') {
+    if (enrollment && selectedMonth && selectedMonth !== 'all') {
       fetchData();
-    } else if (month === 'all') {
+    } else if (selectedMonth === 'all') {
       fetchOverallAttendance();
     }
-  }, [month, enrollment]);
+  }, [selectedMonth, enrollment]);
 
 
   return (
     <div className="flex flex-col justify-center items-center px-4 py-10">
       <h1 className="text-3xl font-bold text-center mb-8">Monthly Attendance Analytics</h1>
 
-      <form className="flex flex-col md:flex-row gap-4 justify-center mb-8">
+      <div className="flex flex-col md:flex-row gap-4 justify-center mb-8">
         <input
           type="number"
           placeholder="Enrollment Number"
           value={enrollment}
           onChange={e => setEnrollment(e.target.value)}
-          className="border border-gray-300 transition-all focus:ring-2 ring-black ring-offset-2 focus:outline-none p-2 rounded-xl w-full"
+          className="border border-gray-300 transition-all focus:ring-2 ring-black ring-offset-2 focus:outline-none p-2 rounded-xl w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           required
         />
-        <select
-          value={month}
-          onChange={e => setMonth(e.target.value)}
-          className="border border-gray-300 transition-all focus:ring-2 ring-black ring-offset-2 focus:outline-none p-2 rounded-xl w-full"
-          required
-        >
-          <option value="">Select Month</option>
-          <option value="all">All</option>
-          {getMonthOptions().map(m => (
-            <option key={m} value={m}>{m}</option>
-          ))}
-        </select>
-      </form>
+
+        <div className="relative">
+          <button
+            onClick={() => { setDropdownOpen(!dropdownOpen); }}
+            className="inline-flex w-full capitalize h-full text-nowrap text-gray-500 items-center gap-2 bg-white px-4 py-2 rounded-xl border text-sm font-semibold"
+          >
+            {selectedMonth === '' ? 'Select Month' : selectedMonth}
+            <FaAngleDown />
+          </button>
+          {dropdownOpen && <div className="absolute shadow-[0_8px_30px_rgba(0,0,0,0.15)] right-0 mt-2 w-48 overflow-hidden bg-white border rounded-xl z-10">
+            <div className="p-1 h-[200px] overflow-auto flex flex-col gap-1">
+              <div
+                onClick={() => {
+                  setSelectedMonth('');
+                  setDropdownOpen(false);
+                }}
+                className={`px-4 py-2 font-bold rounded-md text-sm hover:bg-gray-100 cursor-pointer ${selectedMonth === '' && "bg-gray-100"}`}
+              >
+                Select Month
+              </div>
+              <div
+                onClick={() => {
+                  setSelectedMonth('all');
+                  setDropdownOpen(false);
+                }}
+                className={`px-4 py-2 rounded-md text-sm hover:bg-gray-100 cursor-pointer ${selectedMonth === 'all' && "bg-gray-100"}`}
+              >
+                All
+              </div>
+              {availableMonths.map((month) => (
+                <div
+                  key={month}
+                  onClick={() => {
+                    setSelectedMonth(month);
+                    setDropdownOpen(false);
+                    setMonth(`2025-${monthNames[month]}`)
+                  }}
+                  className={`px-4 py-2 rounded-md text-sm hover:bg-gray-100 cursor-pointer ${selectedMonth === month && "bg-gray-100"}`}
+                >
+                  {month}
+                </div>
+              ))}
+            </div>
+          </div>}
+        </div>
+      </div>
 
       {error && <p className="text-red-500 text-center font-bold bg-red-50 py-5 px-5 md:px-0 md:w-[500px] rounded-3xl">{error}</p>}
 
