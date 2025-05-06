@@ -267,7 +267,7 @@ const AttendanceAnalytics = () => {
       <div className='flex flex-col md:flex-row items-center gap-4'>
         {chartData && (
           <div className="bg-white border h-fit md:w-full w-[350px] transition-all duration-500 rounded-3xl p-6">
-            {!monthlySummaryOverallAttendance && <h2 className="text-2xl font-semibold text-center mb-4">Attendance Distribution of <spna className="block font-bold">{stdName}</spna></h2>}
+            {!monthlySummaryOverallAttendance && <h2 className="text-2xl capitalize font-semibold text-center mb-4">Attendance Distribution of <spna className="block font-bold">{stdName}</spna>  for the selected month</h2>}
             {monthlySummaryOverallAttendance && (
               <h2 className="text-2xl font-semibold text-center mb-4">
                 Attendance Distribution of
